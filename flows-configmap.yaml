@@ -19,7 +19,7 @@ data:
             "user_id"
           ],
           "caching": true,
-          "cache_ttl": 10
+          "cache_ttl": 15
         },
         "ride-recommend": {
           "args": [
