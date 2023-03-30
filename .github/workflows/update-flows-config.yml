@@ -14,19 +14,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install kubectl
-      run: |
-        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-        sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
-    - name: Get the pods of namespace
-      run: |
-        kubectl -n openfaas get pods
-
-    - name: Update ConfigMap
-      run: |
-        kubectl -n openfaas apply -f flows-configmap.yml
-
-    - name: Rollout deployment
-      run: |
-        kubectl -n openfaas rollout restart deployment/my-deployment
+    - name: Connect to VM and run command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.IP_ADDRESS }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          touch ci-test;
