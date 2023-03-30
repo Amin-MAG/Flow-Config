@@ -1,0 +1,32 @@
+name: update-flows-config
+
+on:
+  push:
+    branches:
+      - master
+      - ci
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+    - name: Get the pods of namespace
+      run: |
+        kubectl -n openfaas get pods
+
+    - name: Update ConfigMap
+      run: |
+        kubectl -n openfaas apply -f flows-configmap.yml
+
+    - name: Rollout deployment
+      run: |
+        kubectl -n openfaas rollout restart deployment/my-deployment
