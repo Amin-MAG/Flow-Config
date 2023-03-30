@@ -1,0 +1,28 @@
+name: update-flows-config
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Connect to VM and run command
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.IP_ADDRESS }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /home/amin/flows-config;
+          git pull origin master;
+          k3s kubectl -n openfaas apply -f flows-configmap.yaml;
+          sleep 1;
+          k3s kubectl -n openfaas rollout restart deployment/gateway;
