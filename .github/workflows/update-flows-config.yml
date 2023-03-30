@@ -24,6 +24,6 @@ jobs:
         script: |
           cd /home/amin/flows-config;
           git pull origin ci;
-          k3s kubectl -n openfaas apply -f flows-configmap.yml;
+          k3s kubectl -n openfaas apply -f flows-configmap.yaml;
           sleep 1;
-          k3s kubectl -n openfaas rollout restart  -f deployment/gateway;
+          k3s kubectl -n openfaas rollout restart deployment/gateway;
