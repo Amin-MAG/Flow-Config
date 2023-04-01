@@ -18,8 +18,8 @@ data:
           "args": [
             "user_id"
           ],
-          "caching": true,
-          "cache_ttl": 15
+          "caching": false,
+          "cache_ttl": 0
         },
         "ride-recommend": {
           "args": [
